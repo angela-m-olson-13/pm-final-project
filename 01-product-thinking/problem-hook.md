@@ -1,7 +1,7 @@
 # Problem Hook & Value Proposition, Module 1
 
 - **Scenario:** RouteLogic Velocity (B2B)
-  I chose RouteLogic as the company I work for and the products I work with are all B2B, so this example resonated more.
+- I chose RouteLogic as the company I work for and the products I work with are all B2B, so this example resonated more.
 
 ## Strategic crisis
 If Route Logic does nothing for 12 months there is a real threat that the company will lose its standing in the market to leaner, more agile competitors for their logistics platform.
