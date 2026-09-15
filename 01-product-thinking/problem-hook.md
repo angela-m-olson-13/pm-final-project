@@ -1,48 +1,27 @@
-# Problem Hook & Value Proposition: [StreamLine / RouteLogic / your initiative]
+# Problem Hook & Value Proposition, Module 1
 
-> **Module 1 · ★ Deliverable 1.** Repo file `01-product-thinking/problem-hook.md` — part of your submission.
-> Do the lab in the **Module 1 · Exercise 2 Guide** (linked from the Module 1 deck), then click **⬇ Download .md** — it saves as this exact file. Commit it here.
-> It becomes the **Problem, Value & Hypothesis** slide of your Module 6 final deck. (Your Module 1 · Exercise 1 discovery map lands in `strategic-map.md`.)
+- **Scenario:** RouteLogic Velocity (B2B)
+  I chose RouteLogic as the company I work for and the products I work with are all B2B, so this example resonated more.
 
-## 1. Chosen scenario
+## Strategic crisis
+If Route Logic does nothing for 12 months there is a real threat that the company will lose its standing in the market to leaner, more agile competitors for their logistics platform.
 
-**Path:** _StreamLine Spotlight (B2C) · RouteLogic Velocity (B2B) · my own initiative_
+## Moment of misery
+The user of Route Logic today is compelled to use workarounds like spreadsheets, emails/texts, or even exploring their own with AI versus utilizing the platform.  Users also have suggested willingness to look at competitors in the market to meet their needs.
 
-_One line on why you picked it._
+## Problem hook
+Route Logic's complexity is doing our competitors' sales pitch for them - unless we act, users already solving their problems with workarounds will take their business somewhere that does not make them work this hard.
 
-## 2. The strategic crisis
+## Value proposition
+For Users at regional delivery fleet companies, we will value simplicity in core features because to avoid user workarounds and desire to look at competitor products.
 
-_The big-picture business risk. If the company does nothing for 12 months, what happens to its market position?_
+## Cold-read self-review
+Coming back to this again and after sharing in our partner discussion, the who and why is clear but I feel the problem hook is still not quite catchy enough.  I will refine that a bit further to be even more crisp.  
 
-> If we do nothing for 12 months, the company will…
+Is the business risk high-stakes enough to justify a new initiative?   Yes!
+Is the moment of misery systemic, or just an edge case?	The misery is systemic.
+Does the value proposition actually remove the obstacle?  Yes - reducing complexity and focusing on key core capabilities would improve user adoption and reduce work-arounds and shopping competitors.
 
-## 3. The moment of misery
-
-_The specific point where the product fails the user, forcing a manual workaround (Google, spreadsheets, group texts, a competitor)._
-
-> The user is currently forced to…
-
-## 4. Problem hook
-
-_One urgent sentence fusing the business risk and the user pain, your pitch for why this is the most important thing to work on right now._
-
-> We must solve [business risk] by addressing [user pain]…
-
-## 5. Value proposition
-
-_Who it's for, the new value, and why it's urgent to launch now._
-
-> For **[who]**, we will **[value]** because **[urgent why]**.
-
-## 6. Cold-read self-review
-
-_Read your hook back as a skeptical stakeholder. If you don't feel the urgency, that's your data._
-
-| Question | Your answer |
-|---|---|
-| Is the business risk high-stakes enough to justify a new initiative? | _____ |
-| Is the moment of misery systemic, or just an edge case? | _____ |
-| Does the value proposition actually remove the obstacle? | _____ |
 
 ## 7. Finalized hypothesis _(complete in Module 3)_
 
