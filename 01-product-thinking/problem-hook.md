@@ -25,8 +25,5 @@ Does the value proposition actually remove the obstacle?  Yes - reducing complex
 
 ## 7. Finalized hypothesis _(complete in Module 3)_
 
-> Based on [qual + quant evidence], I believe that [solving X] for [persona] will result in [outcome], as measured by a [X%] change in [success metric]. I will protect [guardrail metric] and make a go/no-go decision after [decision window].
+Based on avg. daily time lost to manual workarounds increasing 3.4× (from ~9 min to 31 min over two years), I believe that solving compliance check friction for drivers will reduce daily workaround time per stop, as measured by a reduction in compliance check time back toward the ~9-min industry benchmark and improved workflow drop-off rates. I will protect Live Dispatch Board and Route Optimizer daily usage rates (must not decline). I will make a go/no-go decision after two weeks of post-launch data across all drivers to ensure adoption trends are stable before scaling, pivoting, or sunsetting.
 
-## Link to full artifact
-
-_[link to your Problem Hook Builder export]_
