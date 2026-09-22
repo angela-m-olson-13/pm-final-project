@@ -23,7 +23,7 @@ Is the moment of misery systemic, or just an edge case?	The misery is systemic.
 Does the value proposition actually remove the obstacle?  Yes - reducing complexity and focusing on key core capabilities would improve user adoption and reduce work-arounds and shopping competitors.
 
 
-## 7. Finalized hypothesis _(complete in Module 3)_
+## Finalized hypothesis _(complete in Module 3)_
 
 Based on avg. daily time lost to manual workarounds increasing 3.4× (from ~9 min to 31 min over two years), I believe that solving compliance check friction for drivers will reduce daily workaround time per stop, as measured by a reduction in compliance check time back toward the ~9-min industry benchmark and improved workflow drop-off rates. I will protect Live Dispatch Board and Route Optimizer daily usage rates (must not decline). I will make a go/no-go decision after two weeks of post-launch data across all drivers to ensure adoption trends are stable before scaling, pivoting, or sunsetting.
 
