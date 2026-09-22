@@ -1,17 +1,30 @@
-# Hypothesis & Success Metrics
+# Hypothesis & Success Metrics (Module 3)
 
-> **Module 3 · ★ Deliverable 3.** Repo file `03-analytics/hypothesis-and-metrics.md` — part of your submission.
-> Do the lab in the **Module 3 · Exercise Guide** (linked from the Module 3 deck), then click **⬇ Download .md** — it saves as this exact file. Commit it here.
-> It feeds the **Problem, Value & Hypothesis** slide of your Module 6 final deck.
+## Pre-work · Hypothesis check
+- **Role , who you are solving for (from M2):** The Experienced Driver Who Has Given Up Trusting It
+- **Goal , what this user is ultimately trying to achieve:** Complete a full route shift efficiently, not losing time in the tool and with the tool having correct information.
+- **Friction / moment of misery , the specific pain blocking their goal:** A compounding issue of overall tool performance and complexity. The tool does not provide timely, correct information to provide real-time information to drivers and it is overly complicated to complete routine tasks that drivers want to spend little time on.
+- **Current workaround , the external tool or manual process they rely on (M2):** Screenshots, paper, phone call, and user tribal knowledge
+- **Problem Hook , your one-sentence framing of the business crisis (M1):** Route Logic's complexity is doing our competitors' sales pitch for them - unless we act, users already solving their problems with workarounds will take their business somewhere that does not make them work this hard.
+- **Value Proposition , the outcome your initiative promised to deliver (M1):** For Users at regional delivery fleet companies, we will value simplicity in core features to avoid user workarounds and desire to look at competitor products.
 
-## Finalized product hypothesis
+## Read your data snapshots
+- **Does the funnel data confirm your M2 friction point, or does it tell a different story? Note where the numbers align with the qualitative pain you found and where they diverge.:** _(not filled in)_
+- **Do the retention patterns align with the workaround your M2 persona used to find content? Note what the Mo. 0→1 drop suggests about the onboarding experience your persona described as frustrating.:** _(not filled in)_
+- **Does the LTV gap and the content mix (61% trending for Wanderers) confirm the moment of misery your persona described? Note which segment your persona is in and whether the data confirms their pain.:** _(not filled in)_
+- **Does the low adoption confirm your persona is burdened by tools they don’t use? Note whether the low scheduling adoption (42%) for coordinators matches your M2 moment of misery.:** This alone does not confirm my persona is burdened by tools they do not use necessarily.  There is some indication that this could be true as AI Predictive ETAs, as an example should help other features, yet it is underutilized.  The low scheduling adoption for coordinators it not a direct match to my M2 moment of misery as I had identified the drivers as the main persona vs coordinators, however I did call out routine tasks taking too long to perform, which the shift scheduling module low adoption could be an aid to one of the routine tasks.
+- **Does the workflow data match the manual process or hack you documented in M2? Note whether the specific drop-offs or time gaps explain why your persona avoids the digital tool.:** Yes, the workflow data supports the manual process documented in M2.  The big pain point identified was the time spent by drivers in marking a stop delivered and taking multiple photos in hope that one of them will upload.  The workflow supports this is where the bulk of the time is spent and wasted.
+- **Look at the CSAT heatmap. Which specific cell most directly maps to your persona’s friction? Note how the NPS trend justifies the urgency of your M1 Problem Hook.:** Scheduling maps most directly to my persona's friction.  This is followed by the Compliance feature.
 
-> Based on [qual + quant evidence], I believe that [solving X] for [persona] will result in [outcome], as measured by a [X%] change in [success metric]. I will protect [guardrail metric] and make a go/no-go decision after [decision window].
-
-## Success metrics
-
-| Metric | Type | Target | Why it matters |
-|---|---|---|---|
-| _North-star_ | | _____ | _____ |
-| _Leading indicator_ | | _____ | _____ |
-| _Guardrail_ | | _____ | _____ |
+## Step 3 · Craft your hypothesis
+- **Qualitative evidence (from M2) , quote the specific friction / moment of misery for your persona:** Core frustration, the exact moment the process feels most “broken”: Step 3 - the stop completion work-around that has to be completed at every stop is the most broken part of the process
+The evidence, a specific quote or behavior from the research that proves this: Executed 30+ times a day, the three-tap completion sequence and unreliable photo upload collectively represent the largest cumulative time loss in the pain points.
+- **Quantitative evidence (from M3) , name the metric or data point that confirms the pain; cite the number:** The CSAT KPI is the most compelling data point that confirms the pain:  
+Avg daily time lost (manual workarounds)	31 min, vs ~9 min from two years ago, which is a 3.4× increase
+- **Persona , role, goal, and the friction you confirmed in the reconciliation steps:** The driver persona is still central to the misery and the goal of the solution.  The driver persona needs to have the solution reduce the time lost each day in manual workarounds.
+- **Problem you are solving , one sentence describing the specific friction this initiative removes:** Complete a full route shift efficiently, not losing time in the tool and with the tool having correct information.
+- **Strategic outcome , what behaviour change do you expect, and how does it map to retention / revenue / churn?:** When the manual workarounds are reduced, expect to see the workflow steps - especially compliance checks and secondarily the route assignments - reduce in time and drop off rates to improve.  This will subsequently improve adoption of the solution and retain existing users whom are today shopping around for competing solutions.
+- **Primary success metric (initiative signal) , the leading indicator that tells you the gap is closing:** In the workflow, expect to see time spend on compliance checks to decrease.  This is the start of closing the gap.  Ideally this should reduce to close to industry benchmarks of ~9min.
+- **Guardrail metric (product signal) , the metric that must NOT drop; it protects your existing base:** The Live Dispatch Board and Route Optimizer have daily usage metrics that are fairly high.  This cannot drop - the users are trying each day because they must to do their job, but then the workarounds start as they go about their workflow.
+- **Decision window , how much time or data before you scale, pivot, or kill? minimum threshold to proceed?:** Given the workflow is daily, once a change is made, data should be able to be gathered after one week to start to review early trends across all drivers.  Even better is two weeks of data before scaling, pivoting or killing to ensure any early data is not unnecessarily skewed as users adopt the updates.
+- **Draft your full hypothesis sentence , one to three sentences; quote the metric, name the persona, name the outcome:** Based on avg. daily time lost to manual workarounds increasing 3.4× (from ~9 min to 31 min over two years), I believe that solving compliance check friction for drivers will reduce daily workaround time per stop, as measured by a reduction in compliance check time back toward the ~9-min industry benchmark and improved workflow drop-off rates. I will protect Live Dispatch Board and Route Optimizer daily usage rates (must not decline). I will make a go/no-go decision after two weeks of post-launch data across all drivers to ensure adoption trends are stable before scaling, pivoting, or sunsetting.
