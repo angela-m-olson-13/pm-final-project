@@ -13,7 +13,7 @@ The user of Route Logic today is compelled to use workarounds like spreadsheets,
 Route Logic's complexity is doing our competitors' sales pitch for them - unless we act, users already solving their problems with workarounds will take their business somewhere that does not make them work this hard.
 
 ## Value proposition
-For Users at regional delivery fleet companies, we will value simplicity in core features because to avoid user workarounds and desire to look at competitor products.
+For Users at regional delivery fleet companies, we will value simplicity in core features to avoid user workarounds and desire to look at competitor products.
 
 ## Cold-read self-review
 Coming back to this again and after sharing in our partner discussion, the who and why is clear but I feel the problem hook is still not quite catchy enough.  I will refine that a bit further to be even more crisp.  
