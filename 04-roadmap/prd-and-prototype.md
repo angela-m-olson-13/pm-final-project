@@ -14,5 +14,5 @@
 ## Prompt-to-prototype sprint
 - **Where did the prototype reveal a gap in my PRD logic? (what I had to update):** The PRD did not cover the situation where the user had a partial checklist completed and the dispatch board reflected the status "Pending - start checklist".  
 Also what constituted the checklist was not clear, including what are typically good to auto-default vs having driver check every time.
-- **My prototype, as a link or a screenshot (publish or share from your tool; in Lovable that is Share → Share Preview, in Bolt Publish → Web. No share URL? Screenshot the working flow):** routelogic-compliance-prototype.html
+- **My prototype, as a link or a screenshot (publish or share from your tool; in Lovable that is Share → Share Preview, in Bolt Publish → Web. No share URL? Screenshot the working flow):** Prototype created using Claude.  Link (also found in repo):  routelogic-compliance-prototype.html
 
