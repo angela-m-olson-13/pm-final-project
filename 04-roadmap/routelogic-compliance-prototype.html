@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RouteLogic — Compliance Checklist</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #0f1923;
+    --ink-2:      #3d4f5e;
+    --ink-3:      #7a8fa0;
+    --surface:    #f5f6f8;
+    --surface-2:  #ffffff;
+    --border:     #dde2e8;
+    --border-strong: #b8c4ce;
+    --green:      #1a8a4a;
+    --green-light:#e6f4ec;
+    --amber:      #e8a020;
+    --amber-light:#fef6e6;
+    --red:        #d93030;
+    --red-light:  #fdeaea;
+    --blue:       #1a5fa8;
+    --blue-light: #e8f0fb;
+    --mono: 'Courier New', 'Consolas', monospace;
+    --sans: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --r: 6px;
+    --r-lg: 10px;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--ink);
+    color: #fff;
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .brand-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+  .topbar-meta { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.45); }
+
+  /* ── SCREEN 1: DISPATCH BOARD ── */
+  #screen-dispatch { background: var(--surface); }
+
+  .dispatch-header { padding: 24px 20px 16px; max-width: 780px; margin: 0 auto; width: 100%; }
+  .dispatch-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  .dispatch-header p { font-size: 13px; color: var(--ink-3); margin-top: 3px; }
+
+  .board-wrap { max-width: 780px; margin: 0 auto; padding: 0 20px 40px; width: 100%; }
+
+  .board-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    font-size: 14px;
+  }
+  .board-table thead tr { background: var(--ink); color: rgba(255,255,255,0.7); font-size: 11px; font-weight: 500; }
+  .board-table th { padding: 10px 14px; text-align: left; font-weight: 500; white-space: nowrap; }
+  .board-table tbody tr { border-top: 1px solid var(--border); transition: background 0.1s; }
+  .board-table tbody tr:hover { background: #f8f9fb; }
+  .board-table td { padding: 12px 14px; vertical-align: middle; }
+
+  .driver-name { font-weight: 500; }
+  .driver-id { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+  .mono-cell { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+
+  .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .badge-pending { background: var(--amber-light); color: #7a4a00; }
+  .badge-pending .dot { background: var(--amber); }
+  .badge-complete { background: var(--green-light); color: #0a4a24; }
+  .badge-complete .dot { background: var(--green); }
+
+  .btn-start {
+    background: var(--ink); color: #fff; border: none;
+    padding: 7px 14px; border-radius: var(--r);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    font-family: var(--sans); white-space: nowrap;
+    transition: background 0.12s;
+  }
+  .btn-start:hover { background: #1e2f3e; }
+  .btn-start:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn-start:disabled { background: var(--border); color: var(--ink-3); cursor: default; }
+  .btn-start.in-progress { background: var(--amber); color: #3a2200; }
+  .btn-start.in-progress:hover { background: #d4911c; }
+
+  .board-notice {
+    display: none; margin-bottom: 16px;
+    padding: 12px 14px;
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: var(--r);
+    font-size: 13px; color: var(--green);
+  }
+
+  /* ── SCREEN 2: CHECKLIST FORM ── */
+  #screen-checklist { background: var(--surface); }
+
+  .checklist-wrap { max-width: 520px; margin: 0 auto; padding: 24px 20px 60px; width: 100%; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--ink-3);
+    background: none; border: none; padding: 0;
+    cursor: pointer; font-family: var(--sans);
+    margin-bottom: 20px; transition: color 0.1s;
+  }
+  .back-link:hover { color: var(--ink); }
+  .back-link:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 3px; }
+
+  .cl-heading { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; line-height: 1.2; }
+  .cl-subhead { font-size: 13px; color: var(--ink-3); margin-top: 5px; }
+
+  .session-strip {
+    display: flex; flex-wrap: wrap; gap: 8px 20px;
+    margin: 16px 0 24px; padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: var(--r);
+    font-size: 12px;
+  }
+  .session-field { display: flex; flex-direction: column; gap: 2px; }
+  .session-label { font-size: 11px; color: var(--ink-3); }
+  .session-value { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); }
+
+  .cl-section { margin-bottom: 24px; }
+  .cl-section-title {
+    font-size: 12px; font-weight: 600; color: var(--ink-2);
+    padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 12px;
+  }
+
+  .prefilled-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-row { display: flex; flex-direction: column; gap: 4px; }
+  .field-label { font-size: 12px; color: var(--ink-2); font-weight: 500; }
+
+  .field-input {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--border); border-radius: var(--r);
+    font-size: 14px; font-family: var(--mono); color: var(--ink);
+    background: #f0f7f3; outline: none;
+    transition: border-color 0.1s, background 0.1s;
+  }
+  .field-input:focus { border-color: var(--blue); background: var(--surface-2); box-shadow: 0 0 0 3px rgba(26,95,168,0.12); }
+  .field-input.error { border-color: var(--red); background: var(--red-light); }
+  .field-input.error:focus { box-shadow: 0 0 0 3px rgba(217,48,48,0.12); }
+
+  .prefilled-tag { display: inline-block; font-size: 10px; color: var(--green); font-weight: 500; margin-top: 2px; }
+  .field-error { font-size: 12px; color: var(--red); margin-top: 3px; display: none; }
+  .field-error.visible { display: block; }
+
+  .checklist-items { display: flex; flex-direction: column; gap: 2px; }
+
+  .check-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 12px; border-radius: var(--r);
+    cursor: pointer; transition: background 0.1s;
+    border: 1px solid transparent; user-select: none;
+  }
+  .check-item:hover { background: #f0f4f8; }
+  .check-item.checked { background: var(--green-light); }
+  .check-item.error-item { border-color: var(--red); background: var(--red-light); }
+
+  .check-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-strong);
+    border-radius: 4px; cursor: pointer;
+    accent-color: var(--green); flex-shrink: 0;
+    pointer-events: none; /* clicks handled by label */
+  }
+
+  .check-item-label { font-size: 14px; color: var(--ink); flex: 1; line-height: 1.4; }
+  .check-item.checked .check-item-label { color: var(--ink-2); }
+
+  .check-tag { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 3px; background: var(--amber-light); color: #7a4a00; flex-shrink: 0; }
+
+  .items-error { font-size: 12px; color: var(--red); padding: 6px 0 0 4px; display: none; }
+  .items-error.visible { display: block; }
+
+  .field-textarea {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--border); border-radius: var(--r);
+    font-size: 14px; font-family: var(--sans); color: var(--ink);
+    background: var(--surface-2); resize: vertical; min-height: 72px;
+    outline: none; transition: border-color 0.1s;
+  }
+  .field-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,95,168,0.12); }
+  .field-hint { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+
+  .submit-area { margin-top: 28px; }
+
+  .submit-error {
+    padding: 11px 14px; background: var(--red-light);
+    border: 1px solid #f5b0b0; border-radius: var(--r);
+    font-size: 13px; color: var(--red);
+    margin-bottom: 14px; display: none;
+  }
+  .submit-error.visible { display: block; }
+
+  .btn-submit {
+    width: 100%; padding: 14px;
+    background: var(--green); color: #fff; border: none;
+    border-radius: var(--r); font-size: 16px; font-weight: 600;
+    font-family: var(--sans); cursor: pointer; letter-spacing: -0.2px;
+    transition: background 0.12s, opacity 0.12s;
+  }
+  .btn-submit:hover { background: #157a40; }
+  .btn-submit:active { background: #0f5e30; }
+  .btn-submit:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+  .btn-submit.loading { opacity: 0.7; pointer-events: none; }
+
+  .save-draft-btn {
+    display: block; width: 100%; text-align: center;
+    margin-top: 12px; font-size: 13px; color: var(--ink-3);
+    background: none; border: none; cursor: pointer;
+    font-family: var(--sans); text-decoration: underline;
+    text-underline-offset: 3px; padding: 6px 0;
+  }
+  .save-draft-btn:hover { color: var(--ink-2); }
+
+  /* ── SCREEN 3: CONFIRMATION ── */
+  #screen-confirm {
+    background: var(--surface);
+    align-items: center;
+    padding: 80px 20px 40px;
+  }
+
+  .confirm-wrap { max-width: 460px; width: 100%; text-align: center; }
+
+  .confirm-icon {
+    width: 72px; height: 72px; background: var(--green);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 24px;
+    animation: pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .confirm-icon { animation: none; } }
+
+  .confirm-heading { font-size: 24px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 6px; }
+  .confirm-sub { font-size: 14px; color: var(--ink-3); margin-bottom: 28px; }
+
+  .confirm-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: var(--r-lg);
+    overflow: hidden; text-align: left; margin-bottom: 24px;
+  }
+  .confirm-card-header {
+    background: var(--green-light); padding: 10px 18px;
+    font-size: 12px; font-weight: 600; color: var(--green);
+    border-bottom: 1px solid #c0e4cd;
+  }
+  .confirm-fields { padding: 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .confirm-field { display: flex; flex-direction: column; gap: 3px; }
+  .confirm-label { font-size: 11px; color: var(--ink-3); }
+  .confirm-value { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--ink); }
+
+  .confirm-ref-row {
+    grid-column: 1 / -1; padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .confirm-ref-label { font-size: 12px; color: var(--ink-3); }
+  .confirm-ref-value { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--green); letter-spacing: 0.04em; }
+
+  .btn-return {
+    width: 100%; padding: 13px; background: var(--ink); color: #fff;
+    border: none; border-radius: var(--r); font-size: 15px;
+    font-weight: 600; font-family: var(--sans); cursor: pointer;
+    transition: background 0.12s; margin-bottom: 12px;
+  }
+  .btn-return:hover { background: #1e2f3e; }
+  .btn-return:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  .view-sub-btn {
+    font-size: 13px; color: var(--ink-3); background: none;
+    border: none; cursor: pointer; font-family: var(--sans);
+    text-decoration: underline; text-underline-offset: 3px; padding: 0;
+  }
+  .view-sub-btn:hover { color: var(--ink-2); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: #fff;
+    padding: 10px 18px; border-radius: 24px;
+    font-size: 13px; font-weight: 500; white-space: nowrap;
+    opacity: 0; transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none; z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 480px) {
+    .prefilled-grid { grid-template-columns: 1fr; }
+    .confirm-fields { grid-template-columns: 1fr; }
+    .board-table { font-size: 13px; }
+    .board-table th, .board-table td { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SCREEN 1 — DISPATCH BOARD ═══ -->
+<div id="screen-dispatch" class="screen active">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="brand-dot"></div>RouteLogic</div>
+    <div class="topbar-meta" id="topbar-time"></div>
+  </div>
+
+  <div class="dispatch-header">
+    <h1>Live Dispatch Board</h1>
+    <p>Thursday 24 Sep 2026 · Morning shift · 3 routes active</p>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board-notice" id="board-notice">Compliance status updated — checklist recorded for Maya Osei.</div>
+
+    <table class="board-table" role="table" aria-label="Driver dispatch status">
+      <thead>
+        <tr>
+          <th>Driver</th><th>Vehicle</th><th>Route</th>
+          <th>Shift start</th><th>Compliance</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="row-maya">
+          <td><div class="driver-name">Maya Osei</div><div class="driver-id">DRV-2047</div></td>
+          <td class="mono-cell">VH-4812</td>
+          <td class="mono-cell">RT-09N</td>
+          <td class="mono-cell">06:30</td>
+          <td id="compliance-badge-maya">
+            <span class="status-badge badge-pending"><span class="dot"></span> Pending</span>
+          </td>
+          <td><button class="btn-start" id="btn-start-maya">Start checklist</button></td>
+        </tr>
+        <tr>
+          <td><div class="driver-name">Daniel Ferro</div><div class="driver-id">DRV-1893</div></td>
+          <td class="mono-cell">VH-3301</td>
+          <td class="mono-cell">RT-04S</td>
+          <td class="mono-cell">06:30</td>
+          <td><span class="status-badge badge-complete"><span class="dot"></span> Complete</span></td>
+          <td><button class="btn-start" disabled>Done</button></td>
+        </tr>
+        <tr>
+          <td><div class="driver-name">Priya Shankar</div><div class="driver-id">DRV-2214</div></td>
+          <td class="mono-cell">VH-5509</td>
+          <td class="mono-cell">RT-11E</td>
+          <td class="mono-cell">07:00</td>
+          <td><span class="status-badge badge-pending"><span class="dot"></span> Pending</span></td>
+          <td><button class="btn-start" id="btn-priya">Start checklist</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ═══ SCREEN 2 — CHECKLIST FORM ═══ -->
+<div id="screen-checklist" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="brand-dot"></div>RouteLogic</div>
+    <div class="topbar-meta">Compliance checklist</div>
+  </div>
+
+  <div class="checklist-wrap">
+    <button class="back-link" id="btn-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Dispatch board
+    </button>
+
+    <h1 class="cl-heading">Compliance checklist</h1>
+    <p class="cl-subhead">Thursday 24 Sep 2026 · Morning shift</p>
+
+    <div class="session-strip">
+      <div class="session-field"><span class="session-label">Driver</span><span class="session-value">Maya Osei · DRV-2047</span></div>
+      <div class="session-field"><span class="session-label">Vehicle</span><span class="session-value">VH-4812</span></div>
+      <div class="session-field"><span class="session-label">Route</span><span class="session-value">RT-09N</span></div>
+      <div class="session-field"><span class="session-label">Shift start</span><span class="session-value">06:30</span></div>
+    </div>
+
+    <!-- Pre-filled fields -->
+    <div class="cl-section">
+      <div class="cl-section-title">Confirmed by system — review and correct if needed</div>
+      <div class="prefilled-grid">
+        <div class="field-row">
+          <label class="field-label" for="f-vehicle">Vehicle ID</label>
+          <input class="field-input" id="f-vehicle" type="text" value="VH-4812" autocomplete="off">
+          <span class="prefilled-tag">Pre-filled</span>
+          <span class="field-error" id="err-vehicle">Enter a vehicle ID before submitting.</span>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="f-route">Route</label>
+          <input class="field-input" id="f-route" type="text" value="RT-09N" autocomplete="off">
+          <span class="prefilled-tag">Pre-filled</span>
+          <span class="field-error" id="err-route">Enter a route before submitting.</span>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="f-driver">Driver ID</label>
+          <input class="field-input" id="f-driver" type="text" value="DRV-2047" autocomplete="off">
+          <span class="prefilled-tag">Pre-filled</span>
+          <span class="field-error" id="err-driver">Enter a driver ID before submitting.</span>
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="f-shift">Shift start</label>
+          <input class="field-input" id="f-shift" type="text" value="06:30" autocomplete="off">
+          <span class="prefilled-tag">Pre-filled</span>
+          <span class="field-error" id="err-shift">Enter a shift start time before submitting.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicle condition -->
+    <div class="cl-section">
+      <div class="cl-section-title">Vehicle condition — confirm each item physically</div>
+      <div class="checklist-items" id="group-vehicle">
+        <label class="check-item"><input type="checkbox" data-required><span class="check-item-label">Brakes responsive — tested before departure</span><span class="check-tag">Required</span></label>
+        <label class="check-item"><input type="checkbox" data-required><span class="check-item-label">Tyre condition and pressure checked</span><span class="check-tag">Required</span></label>
+        <label class="check-item"><input type="checkbox" data-required><span class="check-item-label">Lights and indicators working</span><span class="check-tag">Required</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">Mirrors adjusted and unobstructed</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">Seatbelt present and functional</span></label>
+      </div>
+      <div class="items-error" id="err-vehicle-group">Check all required vehicle items above before submitting.</div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="cl-section">
+      <div class="cl-section-title">Documentation — confirm documents are with you</div>
+      <div class="checklist-items" id="group-docs">
+        <label class="check-item"><input type="checkbox" data-required><span class="check-item-label">Driving licence on person</span><span class="check-tag">Required</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">Vehicle registration documents in cab</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">Insurance certificate present</span></label>
+      </div>
+      <div class="items-error" id="err-docs-group">Check all required documentation items above before submitting.</div>
+    </div>
+
+    <!-- Safety -->
+    <div class="cl-section">
+      <div class="cl-section-title">Safety — check before departure</div>
+      <div class="checklist-items" id="group-safety">
+        <label class="check-item"><input type="checkbox" data-required><span class="check-item-label">Load secured and within weight limit</span><span class="check-tag">Required</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">Fire extinguisher present and in date</span></label>
+        <label class="check-item"><input type="checkbox" checked><span class="check-item-label">First aid kit present</span></label>
+      </div>
+      <div class="items-error" id="err-safety-group">Check all required safety items above before submitting.</div>
+    </div>
+
+    <!-- Notes -->
+    <div class="cl-section">
+      <div class="cl-section-title">Notes (optional)</div>
+      <div class="field-row">
+        <textarea class="field-textarea" id="f-notes" placeholder="Any defects, concerns, or observations for the coordinator…" rows="3"></textarea>
+        <span class="field-hint">Optional. Add a note if anything needs coordinator attention.</span>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <div class="submit-error" id="submit-error">Some items need attention before you can submit. Check the highlighted fields above.</div>
+      <button class="btn-submit" id="btn-submit">Submit checklist</button>
+      <button class="save-draft-btn" id="btn-save-draft">Save draft</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ SCREEN 3 — CONFIRMATION ═══ -->
+<div id="screen-confirm" class="screen">
+  <div class="topbar" style="position:fixed;width:100%;top:0;">
+    <div class="topbar-brand"><div class="brand-dot"></div>RouteLogic</div>
+    <div class="topbar-meta">Checklist submitted</div>
+  </div>
+
+  <div class="confirm-wrap">
+    <div class="confirm-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M8 16.5L13.5 22L24 11" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 class="confirm-heading">Checklist submitted</h1>
+    <p class="confirm-sub">Your compliance record is saved and the dispatch board updated.</p>
+
+    <div class="confirm-card">
+      <div class="confirm-card-header">Submission record</div>
+      <div class="confirm-fields">
+        <div class="confirm-field"><span class="confirm-label">Driver</span><span class="confirm-value">Maya Osei</span></div>
+        <div class="confirm-field"><span class="confirm-label">Driver ID</span><span class="confirm-value">DRV-2047</span></div>
+        <div class="confirm-field"><span class="confirm-label">Vehicle</span><span class="confirm-value" id="confirm-vehicle">—</span></div>
+        <div class="confirm-field"><span class="confirm-label">Route</span><span class="confirm-value" id="confirm-route">—</span></div>
+        <div class="confirm-field"><span class="confirm-label">Submitted at</span><span class="confirm-value" id="confirm-time">—</span></div>
+        <div class="confirm-field"><span class="confirm-label">Shift</span><span class="confirm-value">Morning · 06:30</span></div>
+        <div class="confirm-ref-row">
+          <span class="confirm-ref-label">Reference</span>
+          <span class="confirm-ref-value" id="confirm-ref">—</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-return" id="btn-return">Return to dispatch board</button>
+    <button class="view-sub-btn" id="btn-view-sub">View full submission</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ── Helpers ───────────────────────────────────────────────
+  function el(id) { return document.getElementById(id); }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    el(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showToast(msg) {
+    var t = el('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._tid);
+    t._tid = setTimeout(function() { t.classList.remove('show'); }, 3000);
+  }
+
+  // ── Clock ─────────────────────────────────────────────────
+  function updateClock() {
+    var t = el('topbar-time');
+    if (t) t.textContent = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ── Checkbox styling via change event (fix for double-toggle bug) ──
+  document.querySelectorAll('.check-item input[type="checkbox"]').forEach(function(cb) {
+    // Set initial state
+    var item = cb.closest('.check-item');
+    if (cb.checked) item.classList.add('checked');
+
+    cb.addEventListener('change', function() {
+      if (cb.checked) {
+        item.classList.add('checked');
+        item.classList.remove('error-item');
+      } else {
+        item.classList.remove('checked');
+      }
+    });
+  });
+
+  // ── Screen navigation ─────────────────────────────────────
+  el('btn-start-maya').addEventListener('click', function() {
+    window._checklistOpenTime = Date.now();
+    showScreen('screen-checklist');
+  });
+
+  el('btn-priya').addEventListener('click', function() {
+    showToast("Priya's checklist is not yet active — shift starts at 07:00");
+  });
+
+  el('btn-back').addEventListener('click', function() {
+    showScreen('screen-dispatch');
+  });
+
+  el('btn-return').addEventListener('click', function() {
+    showScreen('screen-dispatch');
+    setTimeout(function() {
+      var notice = el('board-notice');
+      if (notice) notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  });
+
+  el('btn-view-sub').addEventListener('click', function() {
+    showToast('Submission detail view coming in GA release');
+  });
+
+  // ── Validation ────────────────────────────────────────────
+  function clearErrors() {
+    document.querySelectorAll('.field-input').forEach(function(f) { f.classList.remove('error'); });
+    document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('visible'); });
+    document.querySelectorAll('.items-error').forEach(function(e) { e.classList.remove('visible'); });
+    document.querySelectorAll('.check-item').forEach(function(i) { i.classList.remove('error-item'); });
+    el('submit-error').classList.remove('visible');
+  }
+
+  function validate() {
+    var valid = true;
+
+    // Text fields
+    var textFields = [
+      { id: 'f-vehicle', errId: 'err-vehicle' },
+      { id: 'f-route',   errId: 'err-route'   },
+      { id: 'f-driver',  errId: 'err-driver'  },
+      { id: 'f-shift',   errId: 'err-shift'   }
+    ];
+
+    textFields.forEach(function(f) {
+      var input = el(f.id);
+      if (!input.value.trim()) {
+        input.classList.add('error');
+        el(f.errId).classList.add('visible');
+        valid = false;
+      }
+    });
+
+    // Required checkboxes — mark individual items
+    document.querySelectorAll('.check-item input[data-required]').forEach(function(cb) {
+      if (!cb.checked) {
+        cb.closest('.check-item').classList.add('error-item');
+        valid = false;
+      }
+    });
+
+    // Group-level error messages
+    var vehicleUnchecked = Array.from(document.querySelectorAll('#group-vehicle input[data-required]')).some(function(cb) { return !cb.checked; });
+    var docsUnchecked    = Array.from(document.querySelectorAll('#group-docs input[data-required]')).some(function(cb) { return !cb.checked; });
+    var safetyUnchecked  = Array.from(document.querySelectorAll('#group-safety input[data-required]')).some(function(cb) { return !cb.checked; });
+
+    if (vehicleUnchecked) el('err-vehicle-group').classList.add('visible');
+    if (docsUnchecked)    el('err-docs-group').classList.add('visible');
+    if (safetyUnchecked)  el('err-safety-group').classList.add('visible');
+
+    return valid;
+  }
+
+  function scrollToFirstError() {
+    var first = document.querySelector('.field-input.error, .check-item.error-item');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── Submit ────────────────────────────────────────────────
+  el('btn-submit').addEventListener('click', function() {
+    clearErrors();
+
+    if (!validate()) {
+      el('submit-error').classList.add('visible');
+      scrollToFirstError();
+      return;
+    }
+
+    var btn = el('btn-submit');
+    btn.textContent = 'Submitting…';
+    btn.classList.add('loading');
+
+    setTimeout(function() {
+      var now = new Date();
+      var timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      var ref = 'CL-' + now.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(1000 + Math.random() * 9000);
+
+      el('confirm-vehicle').textContent = el('f-vehicle').value.trim();
+      el('confirm-route').textContent   = el('f-route').value.trim();
+      el('confirm-time').textContent    = timeStr;
+      el('confirm-ref').textContent     = ref;
+
+      // Update dispatch board (guardrail requirement)
+      el('compliance-badge-maya').innerHTML = '<span class="status-badge badge-complete"><span class="dot"></span> Complete</span>';
+      el('btn-start-maya').disabled = true;
+      el('btn-start-maya').textContent = 'Done';
+      el('board-notice').style.display = 'block';
+
+      btn.textContent = 'Submit checklist';
+      btn.classList.remove('loading');
+
+      var elapsed = window._checklistOpenTime ? Math.round((Date.now() - window._checklistOpenTime) / 1000) : null;
+      if (elapsed !== null) console.info('[RouteLogic eval] Time-on-task:', elapsed + 's');
+
+      showScreen('screen-confirm');
+    }, 900);
+  });
+
+  // ── Save draft ────────────────────────────────────────────
+  el('btn-save-draft').addEventListener('click', function() {
+    var draft = {
+      vehicle: el('f-vehicle').value,
+      route:   el('f-route').value,
+      driver:  el('f-driver').value,
+      shift:   el('f-shift').value,
+      notes:   el('f-notes').value,
+      saved:   new Date().toISOString()
+    };
+    try { sessionStorage.setItem('cl_draft_DRV-2047', JSON.stringify(draft)); } catch(e) {}
+    setDispatchButtonInProgress();
+    showToast('Draft saved — pick up where you left off');
+  });
+
+  function setDispatchButtonInProgress() {
+    var btn = el('btn-start-maya');
+    if (btn && !btn.disabled) {
+      btn.textContent = 'Checklist started';
+      btn.classList.add('in-progress');
+    }
+  }
+
+  // ── Restore draft ─────────────────────────────────────────
+  (function restoreDraft() {
+    try {
+      var raw = sessionStorage.getItem('cl_draft_DRV-2047');
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      if (d.vehicle) el('f-vehicle').value = d.vehicle;
+      if (d.route)   el('f-route').value   = d.route;
+      if (d.driver)  el('f-driver').value  = d.driver;
+      if (d.shift)   el('f-shift').value   = d.shift;
+      if (d.notes)   el('f-notes').value   = d.notes;
+      // Reflect saved draft state on the dispatch board button
+      setDispatchButtonInProgress();
+    } catch(e) {}
+  })();
+
+});
+</script>
+</body>
+</html>
