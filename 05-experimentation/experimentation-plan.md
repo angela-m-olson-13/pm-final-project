@@ -32,4 +32,4 @@
 > The read date is fixed at the end of 3 weeks, no results reviewed before this date.
 
 ## Debrief
-> Hardest parameter to define, and did it change your hypothesis? quick debrief: Primary success metric was initially thought to be clear, actually was not.  This had to be refined and also better clarified and separated from the guardrail metric.  Testing the experiment hypothesis a few times and making iterative improvements was eye-opening in being more crisp and clear on the goals of the change and what really defines success.
+> Hardest parameter to define, and did it change your hypothesis? Primary success metric was initially thought to be clear, actually was not.  This had to be refined and also better clarified and separated from the guardrail metric.  Testing the experiment hypothesis a few times and making iterative improvements was eye-opening in being more crisp and clear on the goals of the change and what really defines success.
