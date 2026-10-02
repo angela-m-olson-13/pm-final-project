@@ -1,6 +1,7 @@
 # Final Project Presentation
 
 > ★ Final submission, the deck you submit to the learning platform to qualify for certification.
+> https://final-presentation.tiiny.site
 
 Your final project is a single presentation, a self-contained HTML deck built from the six deliverable files in this repo, that tells the story of your product concept end-to-end.
 
