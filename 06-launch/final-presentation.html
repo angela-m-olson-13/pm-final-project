@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RouteLogic Velocity — Angela Olson · PM Certification Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#07162C;
+  --navy-2:#0d2040;
+  --navy-3:#142850;
+  --orange:#fb923c;
+  --orange-dim:rgba(251,146,60,0.25);
+  --orange-glow:rgba(251,146,60,0.12);
+  --cyan:#22d3ee;
+  --teal:#34d399;
+  --blue:#60a5fa;
+  --violet:#a78bfa;
+  --pink:#f472b6;
+  --white:#ffffff;
+  --muted:rgba(255,255,255,0.55);
+  --muted-2:rgba(255,255,255,0.3);
+  --card-border:rgba(251,146,60,0.25);
+  --font:'Plus Jakarta Sans',system-ui,sans-serif;
+  --mono:'Space Mono','Courier New',monospace;
+}
+
+html{
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:var(--font);
+  background:var(--navy);
+  color:var(--white);
+  line-height:1.6;
+}
+
+/* ── Progress bar ── */
+#progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--orange),var(--cyan));
+  width:0%;z-index:100;
+  transition:width 0.2s ease;
+}
+
+/* ── Dot nav ── */
+#dot-nav{
+  position:fixed;right:20px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:10px;z-index:100;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--muted-2);border:1px solid var(--muted-2);
+  cursor:pointer;transition:all 0.2s;
+}
+.dot.active{background:var(--orange);border-color:var(--orange);transform:scale(1.3);}
+.dot:hover{background:var(--muted);border-color:var(--muted);}
+
+/* ── Sections ── */
+section{
+  min-height:100vh;
+  scroll-snap-align:start;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px 80px;
+  overflow:hidden;
+}
+
+/* ── Typography ── */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:400;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:#fdba74;
+  margin-bottom:16px;
+}
+
+h1{font-weight:900;line-height:1.05;letter-spacing:-0.03em;}
+h2{font-weight:800;line-height:1.1;letter-spacing:-0.02em;}
+h3{font-weight:700;line-height:1.2;letter-spacing:-0.01em;}
+
+.metric-val{
+  font-family:var(--mono);
+  font-weight:700;
+}
+
+/* ── Cards ── */
+.card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:24px;
+}
+
+.card-sm{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  padding:16px 20px;
+}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:10px;
+  font-family:var(--font);font-size:14px;font-weight:600;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:opacity 0.15s,transform 0.1s;
+}
+.btn:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-primary{background:var(--orange);color:#07162C;}
+.btn-outline{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
+.btn-cyan{background:var(--cyan);color:#07162C;}
+
+/* ── Pills ── */
+.pill{
+  display:inline-block;
+  padding:4px 12px;border-radius:20px;
+  font-size:12px;font-weight:600;
+  font-family:var(--mono);
+  letter-spacing:0.04em;
+}
+
+/* ── Background decoration ── */
+.glow{
+  position:absolute;border-radius:50%;
+  filter:blur(120px);pointer-events:none;opacity:0.18;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 1 — COVER
+═══════════════════════════════════ */
+#s1{
+  background:var(--navy);
+  justify-content:center;
+  align-items:flex-start;
+}
+#s1 .glow-1{width:600px;height:600px;background:var(--orange);top:-200px;right:-200px;}
+#s1 .glow-2{width:400px;height:400px;background:var(--cyan);bottom:-100px;left:-100px;}
+
+#s1 .cover-inner{
+  max-width:800px;
+  position:relative;z-index:1;
+}
+
+#s1 h1{
+  font-size:clamp(42px,6vw,72px);
+  color:var(--white);
+  margin-bottom:8px;
+}
+
+#s1 h1 span{color:var(--orange);}
+
+#s1 .pitch{
+  font-size:clamp(16px,2vw,20px);
+  color:rgba(255,255,255,0.75);
+  max-width:640px;
+  margin:20px 0 40px;
+  line-height:1.5;
+  font-weight:500;
+}
+
+#s1 .cover-meta{
+  display:flex;flex-wrap:wrap;gap:12px;
+  margin-top:40px;
+  align-items:center;
+}
+
+#s1 .meta-tag{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--muted);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;
+  padding:6px 14px;
+}
+
+#s1 .cover-links{
+  display:flex;gap:12px;flex-wrap:wrap;
+  margin-top:32px;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 5 — STRATEGY
+═══════════════════════════════════ */
+#s5{background:var(--navy);}
+#s5 .glow-a{width:500px;height:500px;background:var(--orange);top:-150px;right:-150px;}
+
+#s5 .strategy-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:28px;
+}
+
+#s5 .crisis-card{
+  background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(251,146,60,0.04));
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:24px;
+  grid-column:1/-1;
+}
+
+#s5 .crisis-card h3{
+  color:var(--orange);
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+#s5 .vp-card{
+  background:rgba(34,211,238,0.06);
+  border:1px solid rgba(34,211,238,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+#s5 .hypothesis-card{
+  background:rgba(52,211,153,0.06);
+  border:1px solid rgba(52,211,153,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+#s5 .hypothesis-card blockquote{
+  font-size:13px;
+  color:rgba(255,255,255,0.75);
+  border-left:3px solid var(--teal);
+  padding-left:14px;
+  margin-top:10px;
+  line-height:1.7;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 6 — RESEARCH
+═══════════════════════════════════ */
+#s6{background:var(--navy-2);}
+#s6 .glow-b{width:400px;height:400px;background:var(--violet);bottom:-100px;left:-100px;}
+
+#s6 .research-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:28px;
+}
+
+#s6 .workaround-card{
+  background:rgba(167,139,250,0.06);
+  border:1px solid rgba(167,139,250,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+#s6 .journey-card{
+  background:rgba(96,165,250,0.06);
+  border:1px solid rgba(96,165,250,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+.journey-row{
+  display:flex;gap:0;
+  margin-top:16px;
+}
+
+.journey-step{
+  flex:1;
+  position:relative;
+  padding:12px 10px 12px 16px;
+  font-size:12px;
+  line-height:1.4;
+  border-radius:0;
+}
+
+.journey-step:first-child{border-radius:8px 0 0 8px;}
+.journey-step:last-child{border-radius:0 8px 8px 0;}
+
+.journey-step .step-label{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  margin-bottom:4px;
+  opacity:0.7;
+}
+
+.journey-step-now{background:rgba(244,114,182,0.15);border:1px solid rgba(244,114,182,0.3);}
+.journey-step-future{background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);}
+
+.misery-badge{
+  display:inline-block;
+  background:var(--pink);
+  color:#07162C;
+  font-family:var(--mono);
+  font-size:9px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:4px;
+  letter-spacing:0.08em;
+  margin-bottom:6px;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 7 — BLUEPRINT
+═══════════════════════════════════ */
+#s7{background:var(--navy);padding:48px 80px;}
+#s7 .glow-c{width:500px;height:500px;background:var(--teal);top:-150px;right:-200px;}
+
+#s7 .blueprint-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:20px;
+  margin-top:24px;
+  align-items:start;
+}
+
+.roadmap-lanes{
+  display:flex;flex-direction:column;gap:12px;
+}
+
+.lane-block{
+  border-radius:12px;
+  padding:16px 18px;
+  border-left:3px solid transparent;
+}
+
+.lane-now{background:rgba(52,211,153,0.08);border-left-color:var(--teal);}
+.lane-next{background:rgba(96,165,250,0.08);border-left-color:var(--blue);}
+.lane-later{background:rgba(167,139,250,0.08);border-left-color:var(--violet);}
+.lane-cut{background:rgba(244,114,182,0.06);border-left-color:var(--pink);}
+
+.lane-block h4{
+  font-size:11px;
+  font-family:var(--mono);
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.lane-now h4{color:var(--teal);}
+.lane-next h4{color:var(--blue);}
+.lane-later h4{color:var(--violet);}
+.lane-cut h4{color:var(--pink);}
+
+.lane-item{
+  display:flex;align-items:baseline;gap:8px;
+  font-size:12px;color:rgba(255,255,255,0.8);
+  padding:3px 0;
+  line-height:1.4;
+}
+.lane-item .feat-id{
+  font-family:var(--mono);font-size:10px;
+  color:var(--muted);flex-shrink:0;width:22px;
+}
+
+.prd-card{
+  background:linear-gradient(135deg,rgba(251,146,60,0.1),rgba(251,146,60,0.03));
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:20px;
+}
+
+.prd-must-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:12px;
+  line-height:1.5;
+}
+.prd-must-item:last-child{border-bottom:none;}
+.prd-must-item .must-num{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--orange);
+  flex-shrink:0;
+  width:18px;
+  font-weight:700;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 8 — VALIDATION
+═══════════════════════════════════ */
+#s8{background:var(--navy-2);}
+#s8 .glow-d{width:450px;height:450px;background:var(--cyan);bottom:-100px;right:-100px;}
+
+#s8 .validation-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+  margin-top:24px;
+}
+
+.val-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:20px;
+}
+
+.val-card h4{
+  font-size:11px;
+  font-family:var(--mono);
+  color:#fdba74;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.val-card p{
+  font-size:12px;
+  color:rgba(255,255,255,0.75);
+  line-height:1.6;
+}
+
+.metric-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:12px;
+}
+.metric-row:last-child{border-bottom:none;}
+.metric-row .mkey{color:var(--muted);}
+.metric-row .mval{font-family:var(--mono);color:var(--white);font-weight:700;}
+
+.ship-rules{
+  grid-column:1/-1;
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+
+.ship-rule{
+  border-radius:10px;
+  padding:14px 16px;
+  font-size:12px;
+  line-height:1.5;
+}
+.ship-rule .rule-label{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.rule-ship{background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);}
+.rule-ship .rule-label{color:var(--teal);}
+.rule-iterate{background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3);}
+.rule-iterate .rule-label{color:var(--orange);}
+.rule-kill{background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.3);}
+.rule-kill .rule-label{color:var(--pink);}
+
+/* ═══════════════════════════════════
+   SLIDE 9 — LAUNCH
+═══════════════════════════════════ */
+#s9{background:var(--navy);}
+#s9 .glow-e{width:500px;height:500px;background:var(--pink);top:-200px;left:-150px;}
+
+#s9 .launch-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:24px;
+}
+
+.channel-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+
+.pill-owned{background:rgba(96,165,250,0.15);color:var(--blue);border:1px solid rgba(96,165,250,0.3);}
+.pill-earned{background:rgba(52,211,153,0.15);color:var(--teal);border:1px solid rgba(52,211,153,0.3);}
+.pill-paid{background:rgba(251,146,60,0.15);color:var(--orange);border:1px solid rgba(251,146,60,0.3);}
+
+.metrics-dashboard{
+  display:flex;flex-direction:column;gap:10px;
+}
+
+.metric-card{
+  border-radius:12px;
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.metric-card.m1{background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);}
+.metric-card.m2{background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.25);}
+.metric-card.m3{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);}
+
+.metric-card .m-label{font-size:12px;color:var(--muted);line-height:1.4;}
+.metric-card .m-target{
+  font-family:var(--mono);
+  font-size:16px;font-weight:700;
+  white-space:nowrap;flex-shrink:0;
+}
+.m1 .m-target{color:var(--teal);}
+.m2 .m-target{color:var(--blue);}
+.m3 .m-target{color:var(--violet);}
+
+.bad-signal{
+  background:rgba(244,114,182,0.08);
+  border:1px solid rgba(244,114,182,0.3);
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:12px;
+  line-height:1.6;
+  color:rgba(255,255,255,0.75);
+}
+.bad-signal .bs-label{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--pink);margin-bottom:6px;
+}
+
+/* ═══════════════════════════════════
+   SLIDE 10 — STORY
+═══════════════════════════════════ */
+#s10{background:var(--navy-2);}
+#s10 .glow-f{width:600px;height:600px;background:var(--blue);bottom:-200px;right:-200px;}
+
+#s10 .story-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:28px;
+}
+
+.friction-card{
+  background:rgba(244,114,182,0.06);
+  border:1px solid rgba(244,114,182,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+.aha-card{
+  background:rgba(251,146,60,0.08);
+  border:1px solid rgba(251,146,60,0.3);
+  border-radius:14px;
+  padding:24px;
+}
+
+.aha-card .aha-icon{
+  font-size:32px;margin-bottom:12px;
+}
+
+.takeaway-card{
+  grid-column:1/-1;
+  background:rgba(52,211,153,0.06);
+  border:1px solid rgba(52,211,153,0.25);
+  border-radius:14px;
+  padding:24px;
+}
+
+.takeaway-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
+}
+
+.takeaway-item{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:rgba(255,255,255,0.8);
+  line-height:1.5;
+}
+
+.takeaway-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--teal);flex-shrink:0;margin-top:7px;
+}
+
+/* ═══════════════════════════════════
+   SLIDE THANK YOU
+═══════════════════════════════════ */
+#s-ty{
+  background:var(--navy);
+  align-items:center;
+  text-align:center;
+  justify-content:center;
+}
+#s-ty .glow-g{width:700px;height:700px;background:var(--orange);top:50%;left:50%;transform:translate(-50%,-50%);}
+
+#s-ty .ty-inner{position:relative;z-index:1;max-width:600px;}
+
+#s-ty h2{font-size:clamp(36px,5vw,60px);margin-bottom:16px;}
+
+#s-ty .ty-pitch{
+  font-size:18px;
+  color:rgba(255,255,255,0.65);
+  max-width:480px;
+  margin:0 auto 36px;
+  line-height:1.5;
+}
+
+#s-ty .repo-block{
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  padding:16px 24px;
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--orange);
+  margin-bottom:24px;
+  word-break:break-all;
+}
+
+#s-ty .submit-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--orange),#f97316);
+  color:#07162C;font-weight:700;font-size:14px;
+  padding:14px 32px;border-radius:50px;
+  margin-top:12px;
+  box-shadow:0 0 40px rgba(251,146,60,0.35);
+}
+
+#s-ty .cohort-tag{
+  font-family:var(--mono);font-size:12px;
+  color:var(--muted);margin-top:28px;
+  letter-spacing:0.06em;
+}
+
+/* ── Shared text utils ── */
+.text-orange{color:var(--orange);}
+.text-cyan{color:var(--cyan);}
+.text-teal{color:var(--teal);}
+.text-blue{color:var(--blue);}
+.text-violet{color:var(--violet);}
+.text-pink{color:var(--pink);}
+.text-muted{color:var(--muted);}
+
+.section-title{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;
+  letter-spacing:-0.02em;
+  margin-bottom:4px;
+}
+
+.section-sub{
+  font-size:15px;
+  color:var(--muted);
+  max-width:600px;
+  margin-bottom:0;
+}
+
+p{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.7;}
+
+/* ── Slide number ── */
+.slide-num{
+  position:absolute;
+  bottom:28px;left:80px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--muted-2);
+  letter-spacing:0.1em;
+}
+
+@media(max-width:900px){
+  section{padding:48px 32px;}
+  #s5 .strategy-grid,#s6 .research-grid,
+  #s7 .blueprint-grid,#s8 .validation-grid,
+  #s9 .launch-grid,#s10 .story-grid{grid-template-columns:1fr;}
+  .ship-rules{grid-template-columns:1fr;}
+  .takeaway-list{grid-template-columns:1fr;}
+  .slide-num{left:32px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav id="dot-nav" aria-label="Slide navigation">
+  <div class="dot active" data-idx="0" title="Cover" tabindex="0" role="button" aria-label="Cover"></div>
+  <div class="dot" data-idx="1" title="Strategy" tabindex="0" role="button" aria-label="Strategy"></div>
+  <div class="dot" data-idx="2" title="Research" tabindex="0" role="button" aria-label="Research"></div>
+  <div class="dot" data-idx="3" title="Blueprint" tabindex="0" role="button" aria-label="Blueprint"></div>
+  <div class="dot" data-idx="4" title="Validation" tabindex="0" role="button" aria-label="Validation"></div>
+  <div class="dot" data-idx="5" title="Launch" tabindex="0" role="button" aria-label="Launch"></div>
+  <div class="dot" data-idx="6" title="Story" tabindex="0" role="button" aria-label="Story"></div>
+  <div class="dot" data-idx="7" title="Thank You" tabindex="0" role="button" aria-label="Thank You"></div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     SLIDE 1 — COVER
+═══════════════════════════════════ -->
+<section id="s1">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="cover-inner">
+    <div class="eyebrow">Product Management Certification · Final Project</div>
+    <h1>RouteLogic<br><span>Velocity</span></h1>
+    <p class="pitch">When drivers stop trusting their tools, they start looking for new ones — RouteLogic fixes the workflow before it becomes a churn problem.</p>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);font-style:italic;margin-top:-10px;margin-bottom:0;">A streamlined workflow for our experienced drivers.</p>
+    <div class="cover-meta">
+      <span class="meta-tag">Angela Olson</span>
+      <span class="meta-tag">Product Management Cohort</span>
+      <span class="meta-tag">Sept 15–26 weekdays 2026</span>
+    </div>
+    <div class="cover-links">
+      <a href="https://apricot-rhodia-14.tiiny.site/" target="_blank" class="btn btn-primary">View Prototype ↗</a>
+      <a href="https://github.com/angela-m-olson-13/pm-final-project" target="_blank" class="btn btn-outline">GitHub Repo ↗</a>
+    </div>
+  </div>
+  <div class="slide-num">01 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 5 — STRATEGY
+═══════════════════════════════════ -->
+<section id="s5">
+  <div class="glow glow-a" style="width:500px;height:500px;background:var(--orange);top:-150px;right:-150px;"></div>
+  <div class="eyebrow">Slide 05 · Strategy</div>
+  <h2 class="section-title">The Problem Is Already Doing<br>Our Competitors' Sales Pitch</h2>
+  <div class="strategy-grid">
+    <div class="crisis-card">
+      <h3>Strategic Crisis</h3>
+      <p style="margin-bottom:10px;">If RouteLogic does nothing for 12 months there is a real threat the company will lose its standing in the market to leaner, more agile competitors. The platform's complexity is actively driving users to build workarounds — spreadsheets, WhatsApp groups, phone calls, even AI tools — <em>instead</em> of using the product they're paying for.</p>
+      <p>Users have expressed willingness to look at competitors. The moment of misery: a 3.4× increase in daily time lost to workarounds, from ~9 min to 31 min over two years.</p>
+    </div>
+    <div class="vp-card">
+      <div class="eyebrow" style="margin-bottom:10px;">Value Proposition</div>
+      <h3 style="font-size:16px;color:var(--cyan);margin-bottom:10px;">Simplicity at the core.</h3>
+      <p>For experienced drivers at regional delivery fleet companies, we will prioritise simplicity in core features to eliminate user workarounds and reduce the desire to evaluate competitor products.</p>
+    </div>
+    <div class="hypothesis-card">
+      <div class="eyebrow" style="margin-bottom:10px;">Data-Backed Hypothesis</div>
+      <blockquote>Based on avg. daily time lost to workarounds increasing 3.4× (from ~9 min to 31 min over two years), solving compliance check friction for drivers will reduce daily workaround time, measured by a reduction in compliance check time back toward the ~9-min industry benchmark. Guardrail: Live Dispatch Board and Route Optimizer daily usage must not decline. Go/no-go decision after two weeks of post-launch data.</blockquote>
+    </div>
+  </div>
+  <div class="slide-num">02 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 6 — RESEARCH
+═══════════════════════════════════ -->
+<section id="s6">
+  <div class="glow glow-b" style="width:400px;height:400px;background:var(--violet);bottom:-100px;left:-100px;"></div>
+  <div class="eyebrow">Slide 06 · Research</div>
+  <h2 class="section-title">Users Built Their Own System.<br>We Just Haven't Noticed Yet.</h2>
+  <div class="research-grid">
+    <div class="workaround-card">
+      <div class="eyebrow" style="color:var(--violet);margin-bottom:12px;">Competitive Analysis · Workaround Evidence</div>
+      <p style="margin-bottom:12px;">The product demonstrates strong strategic value at the reporting and operational management layer — but is experiencing critical erosion of trust at the frontline driver level due to compounding stability, latency, and usability failures.</p>
+      <p style="margin-bottom:12px;">Core workflows are sufficiently broken that users have built parallel systems to compensate:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">WhatsApp groups</span>
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">Paper manifests</span>
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">Dispatcher phone calls</span>
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">Screenshots</span>
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">Tribal knowledge</span>
+        <span class="pill" style="background:rgba(167,139,250,0.15);color:var(--violet);border:1px solid rgba(167,139,250,0.3);font-size:11px;">AI tools</span>
+      </div>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted);">Without urgent intervention on reliability and workflow simplicity, the platform risks losing renewals despite differentiated administrative capabilities.</p>
+    </div>
+    <div class="journey-card">
+      <div class="eyebrow" style="color:var(--blue);margin-bottom:12px;">Driver Journey Map</div>
+      <p style="font-size:12px;margin-bottom:14px;">Drivers want to complete a full route shift efficiently — the tool makes this nearly impossible today. Routine tasks performed up to 30×/day cost more time than they should.</p>
+
+      <div style="margin-bottom:10px;">
+        <div class="misery-badge">Moment of Misery — Today</div>
+        <div class="journey-row">
+          <div class="journey-step journey-step-now">
+            <div class="step-label">Start</div>Screenshot full stop list
+          </div>
+          <div class="journey-step journey-step-now">
+            <div class="step-label">Navigate</div>Tribal knowledge / paper notes
+          </div>
+          <div class="journey-step journey-step-now">
+            <div class="step-label">At stop</div>Multiple photos, app failures
+          </div>
+          <div class="journey-step journey-step-now">
+            <div class="step-label">Failure</div>Call dispatcher manually
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:inline-block;background:var(--teal);color:#07162C;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:0.08em;margin-bottom:6px;">Future Journey</div>
+        <div class="journey-row">
+          <div class="journey-step journey-step-future">
+            <div class="step-label">Start</div>Route loads instantly, offline ready
+          </div>
+          <div class="journey-step journey-step-future">
+            <div class="step-label">In motion</div>Overrides saved for next time
+          </div>
+          <div class="journey-step journey-step-future">
+            <div class="step-label">At stop</div>One tap confirms
+          </div>
+          <div class="journey-step journey-step-future">
+            <div class="step-label">End</div>Dashboard matches reality
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 7 — BLUEPRINT
+═══════════════════════════════════ -->
+<section id="s7">
+  <div class="glow glow-c" style="width:500px;height:500px;background:var(--teal);top:-150px;right:-200px;"></div>
+  <div class="eyebrow">Slide 07 · Blueprint</div>
+  <h2 class="section-title">Now / Next / Later · PRD Highlights</h2>
+  <div class="blueprint-grid">
+    <div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Team: 2 engineers · 1 designer · 1 CS lead · Persona: The Experienced Driver Who Has Given Up Trusting It</p>
+      <div class="roadmap-lanes">
+        <div class="lane-block lane-now">
+          <h4>Now — Pilot (4 weeks, 3 accounts)</h4>
+          <div class="lane-item"><span class="feat-id">B1</span>One-Click Compliance Checklist — pre-fill reuses existing data, low build cost, maximum metric impact</div>
+          <div class="lane-item"><span class="feat-id">B5</span>Step Progress Indicator — restores driver sense of control, zero regression risk</div>
+        </div>
+        <div class="lane-block lane-next">
+          <h4>Next — GA Release (weeks 5–8)</h4>
+          <div class="lane-item"><span class="feat-id">B3</span>Shift Handoff Wizard — 6.8-min saving, needs careful dispatch-board risk management</div>
+          <div class="lane-item"><span class="feat-id">B6</span>Driver Alert Notifications — counters "tool doesn't provide timely information"</div>
+        </div>
+        <div class="lane-block lane-later">
+          <h4>Later — Backlog</h4>
+          <div class="lane-item"><span class="feat-id">B2</span>Smart Daily Report Auto-Fill</div>
+          <div class="lane-item"><span class="feat-id">B4</span>Mobile-First Coordinator Dashboard</div>
+          <div class="lane-item"><span class="feat-id">B7</span>Contextual AI ETA Display (11% adoption)</div>
+        </div>
+        <div class="lane-block lane-cut">
+          <h4>✂ Cut — Not This Cycle</h4>
+          <div class="lane-item"><span class="feat-id">B8</span>Fleet Analytics Manager View · <span class="feat-id">B9</span>Audit Export · <span class="feat-id">B10</span>In-App Training</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="prd-card">
+        <div class="eyebrow" style="margin-bottom:12px;">PRD Must-Haves · B1</div>
+        <div class="prd-must-item">
+          <span class="must-num">1</span>
+          <span>Pre-filled form from active dispatch session — zero manual re-entry of vehicle ID, route, shift start, driver ID</span>
+        </div>
+        <div class="prd-must-item">
+          <span class="must-num">2</span>
+          <span>Single submission action — one tap, no confirmation dialogs, no secondary screens</span>
+        </div>
+        <div class="prd-must-item">
+          <span class="must-num">3</span>
+          <span>Completion timestamp written to compliance record — primary data source for time-on-task measurement</span>
+        </div>
+        <p style="margin-top:12px;font-size:11px;color:var(--muted);">Demoted to Should: inline validation, dispatch board status sync (both are fast-follow, not blockers for the pilot persona)</p>
+      </div>
+      <a href="https://apricot-rhodia-14.tiiny.site/" target="_blank" class="btn btn-cyan" style="justify-content:center;">View Prototype ↗</a>
+    </div>
+  </div>
+  <div class="slide-num">04 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 8 — VALIDATION
+═══════════════════════════════════ -->
+<section id="s8">
+  <div class="glow glow-d" style="width:450px;height:450px;background:var(--cyan);bottom:-100px;right:-100px;"></div>
+  <div class="eyebrow">Slide 08 · Validation</div>
+  <h2 class="section-title">The Experiment</h2>
+  <div class="validation-grid">
+
+    <div class="val-card">
+      <h4>Hypothesis</h4>
+      <p>One-Click Compliance Checklist for the Experienced Driver will reduce compliance check time-on-task from <span class="metric-val text-orange">14.6 min</span> to <span class="metric-val text-teal">≤ 9 min</span>, as measured over 3 weeks at p&lt;0.05.</p>
+    </div>
+
+    <div class="val-card">
+      <h4>Parameters</h4>
+      <div class="metric-row"><span class="mkey">Baseline</span><span class="mval text-orange">14.6 min</span></div>
+      <div class="metric-row"><span class="mkey">MDE</span><span class="mval text-teal">−5.6 min</span></div>
+      <div class="metric-row"><span class="mkey">Sample / arm</span><span class="mval">24</span></div>
+      <div class="metric-row"><span class="mkey">Split</span><span class="mval">50 / 50</span></div>
+      <div class="metric-row"><span class="mkey">Duration</span><span class="mval">3 weeks</span></div>
+      <div class="metric-row"><span class="mkey">Significance</span><span class="mval">p &lt; 0.05</span></div>
+    </div>
+
+    <div class="val-card">
+      <h4>Guardrail</h4>
+      <p style="margin-bottom:10px;">Daily active sessions on the Live Dispatch Board and Route Optimizer monitored per arm weekly.</p>
+      <p style="font-size:12px;background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.3);border-radius:8px;padding:10px;color:rgba(255,255,255,0.8);">If variant arm shows a statistically significant decrease vs. control at any weekly check-in → <strong style="color:var(--pink);">pause and rollback</strong>, regardless of primary metric.</p>
+      <p style="margin-top:8px;font-size:11px;color:var(--muted);">Hard boundary: Dispatch / Route Optimizer usage must not fall &gt;5% · Workflow completion must not drop below 48%</p>
+    </div>
+
+    <div class="val-card" style="grid-column:1/3;">
+      <h4>Control vs. Variant</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+        <div style="background:rgba(244,114,182,0.06);border:1px solid rgba(244,114,182,0.2);border-radius:10px;padding:14px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--pink);font-weight:700;letter-spacing:0.08em;margin-bottom:6px;">CONTROL (A)</div>
+          <p style="font-size:12px;">Current experience: overly complex, compounding tool performance failures. Drivers resort to workarounds to mark stops delivered.</p>
+        </div>
+        <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--teal);font-weight:700;letter-spacing:0.08em;margin-bottom:6px;">VARIANT (B)</div>
+          <p style="font-size:12px;">Bundled: (1) auto-population of session fields + (2) single-action submission. Auto-population expected to drive larger time reduction. Follow-on test will isolate if bundle wins.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ship-rules">
+      <div class="ship-rule rule-ship">
+        <div class="rule-label">Ship ✓</div>
+        Time-on-task ≤ 9 min AND improvement ≥ 5.6 min at p&lt;0.05 AND guardrail not breached after 3 weeks.
+      </div>
+      <div class="ship-rule rule-iterate">
+        <div class="rule-label">Iterate →</div>
+        Direction is positive but lift is below the MDE. One extension week permitted, then re-evaluate.
+      </div>
+      <div class="ship-rule rule-kill">
+        <div class="rule-label">Kill ✕</div>
+        Primary metric shows no improvement or moves negatively. Read date fixed — no early peeking.
+      </div>
+    </div>
+
+  </div>
+  <div class="slide-num">05 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 9 — LAUNCH
+═══════════════════════════════════ -->
+<section id="s9">
+  <div class="glow glow-e" style="width:500px;height:500px;background:var(--pink);top:-200px;left:-150px;"></div>
+  <div class="eyebrow">Slide 09 · Launch</div>
+  <h2 class="section-title">GTM — Tier M Targeted Re-engagement</h2>
+  <div class="launch-grid">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <div class="card-sm">
+        <div class="eyebrow" style="margin-bottom:8px;">Goal · Audience</div>
+        <p style="font-size:13px;margin-bottom:8px;"><strong style="color:var(--white);">Goal:</strong> Re-engagement — existing user base, low adoption, churn risk from drivers evaluating alternatives.</p>
+        <p style="font-size:13px;"><strong style="color:var(--white);">Primary:</strong> Experienced drivers with documented workaround behaviour.<br><strong style="color:var(--white);">Amplifier:</strong> Dispatch coordinators (incentive: fewer driver escalations).</p>
+      </div>
+
+      <div class="card-sm">
+        <div class="eyebrow" style="margin-bottom:10px;">Channels</div>
+        <div class="channel-pills">
+          <span class="pill pill-owned">Email</span>
+          <span class="pill pill-owned">In-app notification</span>
+          <span class="pill pill-owned">Website update</span>
+          <span class="pill pill-earned">Super-user seeding</span>
+          <span class="pill pill-earned">Coordinator endorsement</span>
+          <span class="pill pill-paid">Hub posters + QR</span>
+          <span class="pill pill-paid">Social video</span>
+        </div>
+      </div>
+
+      <div class="card-sm">
+        <div class="eyebrow" style="margin-bottom:8px;">Timeline</div>
+        <div class="metric-row" style="font-size:12px;"><span class="mkey">Weeks 1–2</span><span style="color:var(--white);">Super-users identified, early access</span></div>
+        <div class="metric-row" style="font-size:12px;"><span class="mkey">Week 3</span><span style="color:var(--white);">Full launch + email + video demo</span></div>
+        <div class="metric-row" style="font-size:12px;"><span class="mkey">Week 3+</span><span style="color:var(--white);">Feedback, metrics, iterate</span></div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="eyebrow" style="margin-bottom:4px;">Success Metrics Dashboard</div>
+      <div class="metrics-dashboard">
+        <div class="metric-card m1">
+          <div>
+            <div class="m-label">Feature activation rate · Week 1<br><span style="font-size:11px;color:var(--muted);">≥1 submission within 7 days of launch. &lt;20% at day 7 → review notification copy</span></div>
+          </div>
+          <div class="m-target">≥ 40%</div>
+        </div>
+        <div class="metric-card m2">
+          <div>
+            <div class="m-label">Compliance check time-on-task · Week 3+<br><span style="font-size:11px;color:var(--muted);">Checklist open → confirmation screen. Baseline: 14.6 min</span></div>
+          </div>
+          <div class="m-target">≤ 9 min</div>
+        </div>
+        <div class="metric-card m3">
+          <div>
+            <div class="m-label">Dispatch board weekly active sessions<br><span style="font-size:11px;color:var(--muted);">vs. 4-week pre-launch baseline. Leading retention indicator</span></div>
+          </div>
+          <div class="m-target">No drop</div>
+        </div>
+      </div>
+      <div class="bad-signal">
+        <div class="bs-label">Bad Signal to Watch</div>
+        High submission volume but time-on-task unchanged vs. baseline → feature is being used but not solving the moment of misery. Likely cause: pre-fill not working (data pipeline) or confirmation loops regressed. Investigate before claiming adoption success.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">06 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SLIDE 10 — STORY
+═══════════════════════════════════ -->
+<section id="s10">
+  <div class="glow glow-f" style="width:600px;height:600px;background:var(--blue);bottom:-200px;right:-200px;"></div>
+  <div class="eyebrow">Slide 10 · Story</div>
+  <h2 class="section-title">What I Learned Building This</h2>
+  <div class="story-grid">
+    <div class="friction-card">
+      <div class="eyebrow" style="color:var(--pink);margin-bottom:12px;">Friction Points</div>
+      <p style="margin-bottom:12px;">The biggest strategic challenge was sifting through all the data and deciding which problem to solve. Even once chosen, staying narrow in scope — solving just that problem without bleeding into others — was critical.</p>
+      <p>Keeping the persona as the anchor for every decision had to stay in the forefront throughout. The prototype revealed a gap the PRD missed entirely: what happens when a checklist is partially completed and the dispatch board status still reads "Pending." The PRD also hadn't defined what constitutes the checklist — which items auto-default vs. which require driver confirmation every time.</p>
+    </div>
+    <div class="aha-card">
+      <div class="aha-icon">💡</div>
+      <div class="eyebrow" style="color:var(--orange);margin-bottom:10px;">The Aha Moment</div>
+      <p>The power of defining success metrics and guardrails <em>before</em> testing or launch. There is so much more than "it worked or it didn't." Making adoption and value creation the heart of any feature launch assessment is what separates good product instinct from rigorous product management.</p>
+    </div>
+    <div class="takeaway-card">
+      <div class="eyebrow" style="color:var(--teal);margin-bottom:12px;">Key Takeaways · What I Would Do Next</div>
+      <div class="takeaway-list">
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>MoSCoW requirements discipline: simple to apply, powerful for protecting scope against good-idea drift</span></div>
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>AI as a neutral reviewer: surfaced holes in logic and sharpened specificity I thought was already clear</span></div>
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>Journey mapping and roadmap visualisation gave the team a shared language for the problem</span></div>
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>GTM planning is often undervalued — this course changed how I think about the full launch arc</span></div>
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>Next: bring the experiment brief, shipping criteria, and guardrail framework back to my existing PM team</span></div>
+        <div class="takeaway-item"><div class="takeaway-dot"></div><span>End-to-end viewpoint: evidence-backed decisions, requirement clarity, and launch planning as a connected system — not separate deliverables</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">07 / 08</div>
+</section>
+
+<!-- ═══════════════════════════════════
+     THANK YOU / SUBMIT
+═══════════════════════════════════ -->
+<section id="s-ty">
+  <div class="glow glow-g" style="width:700px;height:700px;background:var(--orange);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="ty-inner">
+    <div class="eyebrow" style="margin-bottom:20px;">Thank You</div>
+    <h2>RouteLogic <span style="color:var(--orange);">Velocity</span></h2>
+    <p class="ty-pitch">A streamlined workflow for experienced drivers — built end-to-end through the Product Management Certification.</p>
+
+    <div class="repo-block">
+      github.com/angela-m-olson-13/pm-final-project
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;">
+      <a href="https://apricot-rhodia-14.tiiny.site/" target="_blank" class="btn btn-primary">View Prototype ↗</a>
+      <a href="https://github.com/angela-m-olson-13/pm-final-project" target="_blank" class="btn btn-outline">GitHub Repo ↗</a>
+    </div>
+
+    <div style="margin-top:20px;">
+      <span class="submit-pill">📋 Submit to Learning Platform</span>
+    </div>
+
+    <div class="cohort-tag">Angela Olson · Product Management Cohort · Sept 15–26 weekdays 2026</div>
+  </div>
+  <div class="slide-num">08 / 08</div>
+</section>
+
+<script>
+(function(){
+  const sections = document.querySelectorAll('section');
+  const dots = document.querySelectorAll('.dot');
+  const bar = document.getElementById('progress-bar');
+  let current = 0;
+
+  function updateNav(idx){
+    current = idx;
+    dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+    const pct = sections.length > 1 ? (idx / (sections.length - 1)) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+
+  // Scroll to section
+  function goTo(idx){
+    idx = Math.max(0, Math.min(sections.length - 1, idx));
+    sections[idx].scrollIntoView({behavior:'smooth'});
+  }
+
+  // Dot clicks
+  dots.forEach((d, i) => {
+    d.addEventListener('click', () => goTo(i));
+    d.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goTo(i); }
+    });
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    switch(e.key){
+      case 'ArrowDown': case ' ':
+        e.preventDefault(); goTo(current + 1); break;
+      case 'ArrowUp':
+        e.preventDefault(); goTo(current - 1); break;
+      case 'Home':
+        e.preventDefault(); goTo(0); break;
+      case 'End':
+        e.preventDefault(); goTo(sections.length - 1); break;
+      case 'Escape':
+        e.preventDefault(); goTo(0); break;
+    }
+  });
+
+  // Intersection observer for active dot
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const idx = Array.from(sections).indexOf(entry.target);
+        if(idx !== -1) updateNav(idx);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Init
+  updateNav(0);
+})();
+</script>
+</body>
+</html>
